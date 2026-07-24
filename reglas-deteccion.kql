@@ -1,0 +1,46 @@
+# Nullsec — Reglas de Detección (Kibana Security Detection Engine)
+# Módulo 2 — SIEM (ELK Stack)
+# Tipo: Custom Query · Lenguaje: KQL · Frecuencia: cada 5 min · Índices: logs-windows.*
+#
+# Las 4 reglas corren en paralelo. Cada una dispara una alerta independiente en el
+# Detection Engine de Kibana Security cuando Sysmon/PowerShell logging reporta un evento
+# que matchea el IOC correspondiente, sincronizado previamente desde MISP vía ti_misp.
+
+# ─────────────────────────────────────────────────────────────────
+# Regla 1 — Script BadRabbit en PowerShell
+# Severity: Critical · Risk Score: 99
+# ─────────────────────────────────────────────────────────────────
+powershell.file.script_block_text: *badrabbit* OR
+powershell.file.script_block_text: *dispci* OR
+powershell.file.script_block_text: *infpub*
+
+# ─────────────────────────────────────────────────────────────────
+# Regla 2 — Conexión a IP maliciosa (C2 BadRabbit / STOP Ransomware)
+# Severity: Critical · Risk Score: 99
+# IOCs sincronizados desde MISP vía ti_misp
+# ─────────────────────────────────────────────────────────────────
+destination.ip: (
+  190.12.87.61 OR 93.184.220.29 OR 188.40.141.211 OR
+  51.124.78.146 OR 20.190.147.10 OR 23.11.40.157 OR
+  52.123.224.133 OR 23.40.112.58 OR 204.79.197.254 OR
+  2.20.187.19 OR 13.107.3.254 OR 150.171.74.254 OR
+  204.79.197.222
+)
+
+# ─────────────────────────────────────────────────────────────────
+# Regla 3 — Consulta DNS a dominio malicioso
+# Severity: High · Risk Score: 73
+# ─────────────────────────────────────────────────────────────────
+dns.question.name: (
+  rb.symcb.com OR rb.symcd.com OR
+  caforssztxqzf2nm.onion OR
+  colisumy.com OR zexeq.com OR
+  msdncf.org
+)
+
+# ─────────────────────────────────────────────────────────────────
+# Regla 4 — Acceso a URL maliciosa
+# Severity: Critical · Risk Score: 99
+# ─────────────────────────────────────────────────────────────────
+url.full: (*colisumy.com* OR *zexeq.com* OR
+           *caforssztxqzf2nm.onion* OR *msdncf.org*)

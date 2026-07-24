@@ -60,6 +60,32 @@ Tras la ejecución controlada de Bad Rabbit en la VM víctima, **las 4 reglas di
 
 ---
 
+## Código propio en este repositorio
+
+| Archivo | Qué hace |
+|---|---|
+| [`reglas-deteccion.kql`](reglas-deteccion.kql) | Las 4 reglas KQL del Detection Engine tal como se configuraron en Kibana Security: script PowerShell de BadRabbit, IP de C2, DNS malicioso, URL maliciosa |
+
+---
+
+## Evidencia del laboratorio
+
+Capturas propias del Módulo 2 (SIEM), de instalación a detección:
+
+| | |
+|---|---|
+| ![Integración ti_misp](nullsec-misp-integration.png) | ![Panel MISP en Kibana](nullsec-misp-dashboard.png) |
+| Configuración de la integración ti_misp (MISP URL, intervalo inicial 120h→2160h) | Dashboard de la integración MISP en Kibana |
+| ![Regla — IP maliciosa](nullsec-regla-ip.png) | ![Regla — PowerShell](nullsec-regla-powershell.png) |
+| Regla 2 configurada en el Detection Engine | Regla 1 configurada en el Detection Engine |
+| ![Verificación de servicios](nullsec-stack-activo.png) | ![Timeline del proyecto](nullsec-timeline.png) |
+| `systemctl status` de Elasticsearch/Kibana/Logstash/Elastic Agent | Línea de tiempo real del proyecto (15 jun – 3 jul) |
+
+![Muestra BadRabbit descargada](nullsec-badrabbit-exe.png)
+*BadRabbit.exe (395 KB) descargado en la VM víctima antes de la ejecución controlada.*
+
+---
+
 ## Stack técnico
 
 `Elasticsearch` · `Kibana` · `Logstash` · `Fleet Server` · `Elastic Agent` · `ti_misp` · `MISP` · `Sysmon v15.21` · `Tailscale VPN` · `CAPEv2` · `MITRE ATT&CK` · `KQL`
