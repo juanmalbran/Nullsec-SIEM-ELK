@@ -7,11 +7,17 @@
   <img src="https://img.shields.io/badge/Sysmon-15.21-00A4EF?style=flat-square" />
   <img src="https://img.shields.io/badge/MITRE%20ATT%26CK-mapeado-FF7B72?style=flat-square" />
   <img src="https://img.shields.io/badge/MTTD-~5--6%20min-3FB950?style=flat-square" />
+
+  <br /><br />
+
+  [![Ver video demo](https://img.shields.io/badge/%E2%96%B6%20Ver%20video%20demo-pr%C3%B3ximamente-lightgrey?style=for-the-badge)](#)
 </div>
 
 ---
 
 ## Resumen
+
+[![🎥 Video — Resumen del proyecto](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
 
 **Nullsec** es un laboratorio que demuestra un ciclo completo de detección de amenazas de extremo a extremo: un IOC cargado manualmente en **MISP** termina disparando una **alerta real en el SIEM** tras la ejecución controlada del ransomware **Bad Rabbit** sobre un endpoint Windows.
 
@@ -22,6 +28,8 @@ No se trataba de instalar herramientas, sino de demostrar que la inteligencia de
 ---
 
 ## Arquitectura
+
+[![🎥 Video — Arquitectura del laboratorio](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
 
 ![Arquitectura del laboratorio](nullsec-architecture.png)
 
@@ -37,6 +45,8 @@ Tres máquinas independientes interconectadas por una **red mesh privada con Tai
 
 ## Mi trabajo — El SIEM (Módulo 2)
 
+[![🎥 Video — Mi trabajo en el SIEM](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
+
 - **Stack ELK 8.19.16** completo (Elasticsearch, Kibana, Logstash) desplegado y endurecido.
 - **Fleet Server** (puerto 8220) para gestión centralizada de los Elastic Agents.
 - **Integración ti_misp v1.43.1** para sincronizar IOCs desde MISP hacia el SIEM. Decisión clave: fijar el `Initial interval` en **2160h (90 días)** en vez del valor por defecto (120h), porque los IOCs de Bad Rabbit se habían cargado 37+ días antes de la integración y de otro modo nunca se hubieran sincronizado.
@@ -47,6 +57,8 @@ Tres máquinas independientes interconectadas por una **red mesh privada con Tai
 ---
 
 ## Resultados
+
+[![🎥 Video — Resultados y alertas disparadas](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
 
 Tras la ejecución controlada de Bad Rabbit en la VM víctima, **las 4 reglas dispararon**:
 
@@ -62,6 +74,8 @@ Tras la ejecución controlada de Bad Rabbit en la VM víctima, **las 4 reglas di
 
 ## Código propio en este repositorio
 
+[![🎥 Video — Explicación de las reglas](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
+
 | Archivo | Qué hace |
 |---|---|
 | [`reglas-deteccion.kql`](reglas-deteccion.kql) | Las 4 reglas KQL del Detection Engine tal como se configuraron en Kibana Security: script PowerShell de BadRabbit, IP de C2, DNS malicioso, URL maliciosa |
@@ -69,6 +83,8 @@ Tras la ejecución controlada de Bad Rabbit en la VM víctima, **las 4 reglas di
 ---
 
 ## Evidencia del laboratorio
+
+[![🎥 Video — Recorrido del laboratorio](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
 
 Capturas propias del Módulo 2 (SIEM), de instalación a detección:
 
@@ -88,11 +104,15 @@ Capturas propias del Módulo 2 (SIEM), de instalación a detección:
 
 ## Stack técnico
 
+[![🎥 Video — Repaso del stack técnico](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
+
 `Elasticsearch` · `Kibana` · `Logstash` · `Fleet Server` · `Elastic Agent` · `ti_misp` · `MISP` · `Sysmon v15.21` · `Tailscale VPN` · `CAPEv2` · `MITRE ATT&CK` · `KQL`
 
 ---
 
 ## Aprendizajes
+
+[![🎥 Video — Aprendizajes y conclusiones](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
 
 - La detección efectiva no depende de una sola herramienta, sino de la **correlación** entre inteligencia (MISP) y telemetría (Sysmon) a través del SIEM.
 - Un detalle de configuración (el intervalo de sincronización) puede ser la diferencia entre detectar o no detectar una amenaza real.
