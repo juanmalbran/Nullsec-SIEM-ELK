@@ -102,6 +102,30 @@ Capturas propias del Módulo 2 (SIEM), de instalación a detección:
 
 ---
 
+## Troubleshooting real
+
+[![🎥 Video — Troubleshooting](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
+
+Montar el SIEM no fue lineal. Estos son 5 de los 11 problemas reales que resolví durante la implementación — el tipo de troubleshooting que se repite en cualquier stack ELK/Fleet en producción, no solo en este laboratorio:
+
+| Síntoma | Causa | Solución |
+|---|---|---|
+| `x509: certificate signed by unknown authority` al conectar ti_misp con MISP | El certificado auto-firmado de MISP no estaba en el trust store del Elastic Agent | `ssl.verification_mode: none` en la configuración de la integración |
+| `logs-ti_misp.threat-default` con 0 documentos tras activar la integración | Los IOCs se habían cargado en MISP 37+ días antes; el `Initial interval` por defecto (120h) no llegaba tan atrás | Ampliar el `Initial interval` a 2160h (90 días) |
+| Los Elastic Agents no podían alcanzar el Fleet Server por Tailscale | iptables bloqueaba por defecto el rango CGNAT `100.64.0.0/10` que usa Tailscale | Reglas `ACCEPT` explícitas por IP + persistencia con `iptables-save` |
+| Kibana se caía inmediatamente al iniciar, error de `encryptionKey` | Elastic 8.x exige 3 claves de cifrado (saved objects, security, reporting) que no estaban generadas | `kibana-encryption-keys generate` e insertarlas en `kibana.yml` |
+| Fleet Server devolvía `401 Unauthorized` con el service token | El token se generó antes de que Elasticsearch terminara su inicialización segura | Regenerar el token una vez el cluster estaba en estado `green` |
+
+---
+
+## Limitaciones y mejoras futuras
+
+No se evaluó propagación real del ransomware (movimiento lateral vía SMB, dumping de credenciales) — la ejecución se limitó a un único host aislado, y no se incorporó un SOAR, así que la respuesta a las alertas fue observación, no automatización.
+
+Mejoras identificadas: feeds automáticos de MISP para no depender de carga manual de IOCs, un segundo host víctima para evaluar cobertura de detección ante movimiento lateral, e integrar un SOAR (Shuffle o TheHive) para automatizar la respuesta a alertas críticas.
+
+---
+
 ## Stack técnico
 
 [![🎥 Video — Repaso del stack técnico](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
