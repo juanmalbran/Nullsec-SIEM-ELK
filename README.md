@@ -19,7 +19,7 @@
 
 [![🎥 Video — Resumen del proyecto](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
 
-**Nullsec** es un laboratorio que demuestra un ciclo completo de detección de amenazas de extremo a extremo: un IOC cargado manualmente en **MISP** termina disparando una **alerta real en el SIEM** tras la ejecución controlada del ransomware **Bad Rabbit** sobre un endpoint Windows.
+**Nullsec** es un laboratorio que demuestra un ciclo completo de detección de amenazas de extremo a extremo: un **IOC** (*indicator of compromise* — una huella conocida de un ataque, como el hash de un archivo o una IP maliciosa) cargado manualmente en **MISP** (la plataforma de inteligencia de amenazas) termina disparando una **alerta real en el SIEM** —el sistema que centraliza los logs de toda la red y los correlaciona para detectar ataques— tras la ejecución controlada del ransomware **Bad Rabbit** sobre un endpoint Windows.
 
 No se trataba de instalar herramientas, sino de demostrar que la inteligencia de amenazas, la ingesta de telemetría y las reglas de detección se integran y funcionan juntas en producción.
 
@@ -41,7 +41,7 @@ Tres máquinas independientes interconectadas por una **red mesh privada con Tai
 | **2 — ELK Stack** *(mi módulo)* | **Núcleo de detección (SIEM)** | Elasticsearch · Kibana · Logstash · Fleet Server · ti_misp · 4 reglas KQL |
 | **3 — VM Víctima** | Endpoint comprometido | Windows 10 · Elastic Agent · Sysmon · ejecución de BadRabbit.exe |
 
-Los IOCs de Bad Rabbit (hashes, IPs de C2, dominios) provienen del análisis dinámico de la muestra —descargada de **MalwareBazaar** y detonada en un sandbox **CAPEv2**— y se cargaron manualmente en MISP (Módulo 1). Ese es el punto de partida de la inteligencia que mi SIEM (Módulo 2) consume y correlaciona.
+Los IOCs de Bad Rabbit —hashes, dominios e IPs de **C2** (*Command & Control*: los servidores desde donde el malware recibe órdenes)— provienen del análisis dinámico de la muestra, descargada de **MalwareBazaar** y detonada en un sandbox **CAPEv2**, y se cargaron manualmente en MISP (Módulo 1). Ese es el punto de partida de la inteligencia que mi SIEM (Módulo 2) consume y correlaciona.
 
 ---
 
@@ -66,9 +66,9 @@ Tras la ejecución controlada de Bad Rabbit en la VM víctima, **las 4 reglas di
 
 ![Alertas disparadas](nullsec-alertas.png)
 
-- **MTTD estimado: 5-6 minutos**
+- **MTTD estimado: 5-6 minutos** — el *Mean Time To Detect*, cuánto tardó el SIEM en levantar la alerta desde que se ejecutó el ransomware (cuanto más bajo, mejor)
 - **484** documentos IOC sincronizados vía ti_misp
-- **46** eventos Sysmon capturados durante la ejecución
+- **46** eventos Sysmon capturados durante la ejecución (Sysmon registra en detalle la actividad del endpoint Windows: procesos, conexiones, etc.)
 - Detección validada de extremo a extremo: **PowerShell malicioso · IP de C2 · DNS malicioso · URL maliciosa**
 - Técnicas mapeadas a MITRE ATT&CK (T1218 rundll32, T1485, T1562.001, entre otras)
 
@@ -122,7 +122,7 @@ Montar el SIEM no fue lineal. Estos son 5 de los 11 problemas reales que resolv�
 
 ## Limitaciones y mejoras futuras
 
-No se evaluó propagación real del ransomware (movimiento lateral vía SMB, dumping de credenciales) — la ejecución se limitó a un único host aislado, y no se incorporó un SOAR, así que la respuesta a las alertas fue observación, no automatización.
+No se evaluó propagación real del ransomware (movimiento lateral —el salto del atacante de una máquina a otra dentro de la red— vía SMB, ni volcado de credenciales) — la ejecución se limitó a un único host aislado, y no se incorporó un **SOAR** (plataforma que automatiza la respuesta a las alertas), así que la respuesta fue observación, no automatización.
 
 Mejoras identificadas: feeds automáticos de MISP para no depender de carga manual de IOCs, un segundo host víctima para evaluar cobertura de detección ante movimiento lateral, e integrar un SOAR (Shuffle o TheHive) para automatizar la respuesta a alertas críticas.
 
