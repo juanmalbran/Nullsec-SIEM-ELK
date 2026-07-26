@@ -144,6 +144,17 @@ Mejoras identificadas: feeds automáticos de MISP para no depender de carga manu
 
 ---
 
+## Módulos relacionados
+
+Este proyecto es el **integrador** del bootcamp: reúne en un solo laboratorio lo aprendido por separado en cada módulo.
+
+- **[Blue Team](https://github.com/juanmalbran/Blue-Team)** — la base del SIEM: segmentación de red, Fleet y análisis de logs que aquí se llevan a detección real.
+- **[Análisis de Malware](https://github.com/juanmalbran/Analisis-de-Malware)** — el análisis de Bad Rabbit (estático, dinámico y YARA) que produce los IOCs cargados en MISP.
+- **[DFIR](https://github.com/juanmalbran/DFIR)** — el paso siguiente a la alerta: adquisición, análisis forense y respuesta al incidente detectado.
+- **[Red Team](https://github.com/juanmalbran/Red-Team)** — las TTPs del adversario (MITRE ATT&CK, C2) que estas reglas KQL están diseñadas para cazar.
+
+---
+
 <div align="center">
   <sub>Parte del portfolio de <a href="https://github.com/juanmalbran">Juan Malbrán · M4LBYTE</a></sub>
 </div>
