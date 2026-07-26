@@ -41,6 +41,8 @@ Tres máquinas independientes interconectadas por una **red mesh privada con Tai
 | **2 — ELK Stack** *(mi módulo)* | **Núcleo de detección (SIEM)** | Elasticsearch · Kibana · Logstash · Fleet Server · ti_misp · 4 reglas KQL |
 | **3 — VM Víctima** | Endpoint comprometido | Windows 10 · Elastic Agent · Sysmon · ejecución de BadRabbit.exe |
 
+Los IOCs de Bad Rabbit (hashes, IPs de C2, dominios) provienen del análisis dinámico de la muestra —descargada de **MalwareBazaar** y detonada en un sandbox **CAPEv2**— y se cargaron manualmente en MISP (Módulo 1). Ese es el punto de partida de la inteligencia que mi SIEM (Módulo 2) consume y correlaciona.
+
 ---
 
 ## Mi trabajo — El SIEM (Módulo 2)
@@ -92,8 +94,8 @@ Capturas propias del Módulo 2 (SIEM), de instalación a detección:
 |---|---|
 | ![Integración ti_misp](nullsec-misp-integration.png) | ![Panel MISP en Kibana](nullsec-misp-dashboard.png) |
 | Configuración de la integración ti_misp (MISP URL, intervalo inicial 120h→2160h) | Dashboard de la integración MISP en Kibana |
-| ![Regla — IP maliciosa](nullsec-regla-ip.png) | ![Regla — PowerShell](nullsec-regla-powershell.png) |
-| Regla 2 configurada en el Detection Engine | Regla 1 configurada en el Detection Engine |
+| ![Regla — PowerShell](nullsec-regla-powershell.png) | ![Regla — IP maliciosa](nullsec-regla-ip.png) |
+| Regla 1 configurada en el Detection Engine | Regla 2 configurada en el Detection Engine |
 | ![Verificación de servicios](nullsec-stack-activo.png) | ![Timeline del proyecto](nullsec-timeline.png) |
 | `systemctl status` de Elasticsearch/Kibana/Logstash/Elastic Agent | Línea de tiempo real del proyecto (15 jun – 3 jul) |
 
