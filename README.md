@@ -10,44 +10,38 @@
 
   <br /><br />
 
-  [![Ver video demo](https://img.shields.io/badge/%E2%96%B6%20Ver%20video%20demo-pr%C3%B3ximamente-lightgrey?style=for-the-badge)](#)
+  [![Ver demo en video](https://img.shields.io/badge/%E2%96%B6%20Ver%20demo%20en%20video-pr%C3%B3ximamente-lightgrey?style=for-the-badge)](#)
 </div>
 
 ---
 
 ## Resumen
 
-[![🎥 Video — Resumen del proyecto](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
-
 **Nullsec** es un laboratorio que demuestra un ciclo completo de detección de amenazas de extremo a extremo: un **IOC** (*indicator of compromise* — una huella conocida de un ataque, como el hash de un archivo o una IP maliciosa) cargado manualmente en **MISP** (la plataforma de inteligencia de amenazas) termina disparando una **alerta real en el SIEM** —el sistema que centraliza los logs de toda la red y los correlaciona para detectar ataques— tras la ejecución controlada del ransomware **Bad Rabbit** sobre un endpoint Windows.
 
 No se trataba de instalar herramientas, sino de demostrar que la inteligencia de amenazas, la ingesta de telemetría y las reglas de detección se integran y funcionan juntas en producción.
 
-> Fue un proyecto grupal con tres módulos. **Mi rol fue el Módulo 2: el núcleo de detección**, el servidor ELK que conectaba MISP (inteligencia) con la VM víctima (telemetría) y correlacionaba ambas fuentes para producir las alertas.
+> Proyecto grupal de tres módulos, desarrollado junto a **Gabriel Gutiérrez Rebolledo** (Módulo 1 · MISP) e **Irene Alcalá Serrano** (Módulo 3 · VM víctima). **Mi rol fue el Módulo 2: el núcleo de detección** — el servidor ELK que conectaba MISP (inteligencia) con la VM víctima (telemetría) y correlacionaba ambas fuentes para producir las alertas.
 
 ---
 
 ## Arquitectura
 
-[![🎥 Video — Arquitectura del laboratorio](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
-
 ![Arquitectura del laboratorio](nullsec-architecture.png)
 
-Tres máquinas independientes interconectadas por una **red mesh privada con Tailscale**, cada una a cargo de un módulo:
+Tres máquinas independientes interconectadas por una **red mesh privada con Tailscale**, cada una a cargo de un integrante del equipo:
 
-| Módulo | Rol | Componentes |
-|---|---|---|
-| **1 — MISP** | Threat Intelligence | IOCs de Bad Rabbit (hashes, IPs C2, dominios), Galaxies MITRE ATT&CK, API para ti_misp |
-| **2 — ELK Stack** *(mi módulo)* | **Núcleo de detección (SIEM)** | Elasticsearch · Kibana · Logstash · Fleet Server · ti_misp · 4 reglas KQL |
-| **3 — VM Víctima** | Endpoint comprometido | Windows 10 · Elastic Agent · Sysmon · ejecución de BadRabbit.exe |
+| Módulo | A cargo | Rol | Componentes |
+|---|---|---|---|
+| **1 — MISP** | Gabriel Gutiérrez Rebolledo | Threat Intelligence | IOCs de Bad Rabbit (hashes, IPs C2, dominios), Galaxies MITRE ATT&CK, API para ti_misp |
+| **2 — ELK Stack** | **Juan Malbrán** *(este repo)* | **Núcleo de detección (SIEM)** | Elasticsearch · Kibana · Logstash · Fleet Server · ti_misp · 4 reglas KQL |
+| **3 — VM Víctima** | Irene Alcalá Serrano | Endpoint comprometido | Windows 10 · Elastic Agent · Sysmon · ejecución de BadRabbit.exe |
 
 Los IOCs de Bad Rabbit —hashes, dominios e IPs de **C2** (*Command & Control*: los servidores desde donde el malware recibe órdenes)— provienen del análisis dinámico de la muestra, descargada de **MalwareBazaar** y detonada en un sandbox **CAPEv2**, y se cargaron manualmente en MISP (Módulo 1). Ese es el punto de partida de la inteligencia que mi SIEM (Módulo 2) consume y correlaciona.
 
 ---
 
 ## Mi trabajo — El SIEM (Módulo 2)
-
-[![🎥 Video — Mi trabajo en el SIEM](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
 
 - **Stack ELK 8.19.16** completo (Elasticsearch, Kibana, Logstash) desplegado y endurecido.
 - **Fleet Server** (puerto 8220) para gestión centralizada de los Elastic Agents.
@@ -59,8 +53,6 @@ Los IOCs de Bad Rabbit —hashes, dominios e IPs de **C2** (*Command & Control*:
 ---
 
 ## Resultados
-
-[![🎥 Video — Resultados y alertas disparadas](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
 
 Tras la ejecución controlada de Bad Rabbit en la VM víctima, **las 4 reglas dispararon**:
 
@@ -76,8 +68,6 @@ Tras la ejecución controlada de Bad Rabbit en la VM víctima, **las 4 reglas di
 
 ## Código propio en este repositorio
 
-[![🎥 Video — Explicación de las reglas](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
-
 | Archivo | Qué hace |
 |---|---|
 | [`reglas-deteccion.kql`](reglas-deteccion.kql) | Las 4 reglas KQL del Detection Engine tal como se configuraron en Kibana Security: script PowerShell de BadRabbit, IP de C2, DNS malicioso, URL maliciosa |
@@ -85,8 +75,6 @@ Tras la ejecución controlada de Bad Rabbit en la VM víctima, **las 4 reglas di
 ---
 
 ## Evidencia del laboratorio
-
-[![🎥 Video — Recorrido del laboratorio](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
 
 Capturas propias del Módulo 2 (SIEM), de instalación a detección:
 
@@ -105,8 +93,6 @@ Capturas propias del Módulo 2 (SIEM), de instalación a detección:
 ---
 
 ## Troubleshooting real
-
-[![🎥 Video — Troubleshooting](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
 
 Montar el SIEM no fue lineal. Estos son 5 de los 11 problemas reales que resolví durante la implementación — el tipo de troubleshooting que se repite en cualquier stack ELK/Fleet en producción, no solo en este laboratorio:
 
@@ -130,15 +116,11 @@ Mejoras identificadas: feeds automáticos de MISP para no depender de carga manu
 
 ## Stack técnico
 
-[![🎥 Video — Repaso del stack técnico](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
-
 `Elasticsearch` · `Kibana` · `Logstash` · `Fleet Server` · `Elastic Agent` · `ti_misp` · `MISP` · `Sysmon v15.21` · `Tailscale VPN` · `CAPEv2` · `MITRE ATT&CK` · `KQL`
 
 ---
 
 ## Aprendizajes
-
-[![🎥 Video — Aprendizajes y conclusiones](https://img.shields.io/badge/%F0%9F%8E%A5%20Video-pr%C3%B3ximamente-lightgrey?style=flat-square)](#)
 
 - La detección efectiva no depende de una sola herramienta, sino de la **correlación** entre inteligencia (MISP) y telemetría (Sysmon) a través del SIEM.
 - Un detalle de configuración (el intervalo de sincronización) puede ser la diferencia entre detectar o no detectar una amenaza real.
@@ -150,10 +132,10 @@ Mejoras identificadas: feeds automáticos de MISP para no depender de carga manu
 
 Este proyecto es el **integrador** del bootcamp: reúne en un solo laboratorio lo aprendido por separado en cada módulo.
 
-- **[Blue Team](https://github.com/juanmalbran/Blue-Team)** — la base del SIEM: segmentación de red, Fleet y análisis de logs que aquí se llevan a detección real.
-- **[Análisis de Malware](https://github.com/juanmalbran/Analisis-de-Malware)** — el análisis de Bad Rabbit (estático, dinámico y YARA) que produce los IOCs cargados en MISP.
+- **[Blue-Team](https://github.com/juanmalbran/Blue-Team)** — la base del SIEM: segmentación de red, Fleet y análisis de logs que aquí se llevan a detección real.
+- **[Analisis-de-Malware](https://github.com/juanmalbran/Analisis-de-Malware)** — el análisis de Bad Rabbit (estático, dinámico y YARA) que produce los IOCs cargados en MISP.
 - **[DFIR](https://github.com/juanmalbran/DFIR)** — el paso siguiente a la alerta: adquisición, análisis forense y respuesta al incidente detectado.
-- **[Red Team](https://github.com/juanmalbran/Red-Team)** — las TTPs del adversario (MITRE ATT&CK, C2) que estas reglas KQL están diseñadas para cazar.
+- **[Red-Team](https://github.com/juanmalbran/Red-Team)** — las TTPs del adversario (MITRE ATT&CK, C2) que estas reglas KQL están diseñadas para cazar.
 
 ---
 
