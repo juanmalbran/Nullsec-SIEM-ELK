@@ -10,7 +10,7 @@
 
   <br /><br />
 
-  [![Ver demo en video](https://img.shields.io/badge/%E2%96%B6%20Ver%20demo%20en%20video-pr%C3%B3ximamente-lightgrey?style=for-the-badge)](#)
+  [![Ver demo en video](https://img.shields.io/badge/%E2%96%B6%20Ver%20demo%20en%20video-1AB7EA?style=for-the-badge&logo=vimeo&logoColor=white)](https://vimeo.com/1213340575)
 </div>
 
 ---
