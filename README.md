@@ -11,6 +11,8 @@
   <br /><br />
 
   [![Ver demo en video](https://img.shields.io/badge/%E2%96%B6%20Ver%20demo%20en%20video-1AB7EA?style=for-the-badge&logo=vimeo&logoColor=white)](https://vimeo.com/1213340575)
+
+  <sub>Presentación del equipo · mi parte — <strong>SIEM (Módulo 2)</strong> — del minuto <strong>4:30</strong> al <strong>15:30</strong></sub>
 </div>
 
 ---
